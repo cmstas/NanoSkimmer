@@ -26,7 +26,7 @@ Copy the package.tar.gz to ```/nfs-7``` area
 
 ## Condor
 
-First create a ```package.tar.gz```.  
+First create a ```package.tar.gz``` following the previous section instruction.
 
 Then go to ```condor/```
 
