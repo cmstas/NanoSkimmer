@@ -42,6 +42,10 @@ And run
 
     python runMetis.py TTHID_3l_v2 # automatically picks up /nfs-7/userdata/phchang/NanoSkimmers/TTHID_3l_v2_package.tar.gz
 
+Repeatedly run it until the jobs are all done and the merging is done.
+
+Modify the file content of ```runMetis.py``` to your liking.
+
 NOTE: ```/nfs-7/userdata/phchang``` is hardcoded! so please change if you don't have your skimmer in philip's place. (Or ask him to put it in his place.)  
 Or, if needed, in ```runMetis.py```, point to the desired ```package.tar.gz``` by modifying ```tarfile``` variable, and give a new ```tag```.
 
