@@ -1,9 +1,15 @@
 # Overview
 
 This creates a NanoSkimmer based on ```nanoAOD-tools```.  
-Then, we need to create a ```package.tar.gz``` for the condor jobs.  
+
+## Creating skimmer
+
+We need to create a ```package.tar.gz``` for the condor jobs.  
+
 The selections are defined in ```extra/skimModule.py```.  
+
 Also ```extra/keep_and_drop.txt``` contains the list of branches to keep or drop.  
+
 Modify the files to your liking.  
 
 Then, to create a ```package.tar.gz``` for the condor jobs
