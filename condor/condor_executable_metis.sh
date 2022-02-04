@@ -164,7 +164,7 @@ fi
 CMD="python scripts/nano_postproc.py \
     ./ ${INPUTFILE} \
     -b python/postprocessing/examples/keep_and_drop.txt \
-    -I PhysicsTools.NanoAODTools.postprocessing.examples.vbsHwwSkimModule vbsHwwSkimModuleConstr"
+    -I PhysicsTools.NanoAODTools.postprocessing.examples.skimModule skimModuleConstr"
 echo $CMD
 echo "Running nano_postproc.py" | tee >(cat >&2)
 $CMD > >(tee nano_postproc.txt) 2> >(tee nano_postproc_stderr.txt >&2)
