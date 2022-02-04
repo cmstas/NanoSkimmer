@@ -24,10 +24,9 @@ except:
 if __name__ == "__main__":
 
     # submission tag
-    tarfile = "/nfs-7/userdata/phchang/VBSHWWNanoSkimmers/VBSHWWNanoSkimmer_{}_CMSSW_10_2_13_slc7_amd64_gcc700.package.tar.gz".format(tag)
+    tarfile = "/nfs-7/userdata/phchang/NanoSkimmers/{}_package.tar.gz".format(tag)
 
-    skimtype = "ttHID"
-    skim_merged_dir = "/nfs-7/userdata/phchang/NanoSkim/{}_{}/".format(skimtype, tag)
+    skim_merged_dir = "/nfs-7/userdata/phchang/NanoSkim/{}/".format(tag)
 
     task_summary = {}
 
@@ -50,7 +49,7 @@ if __name__ == "__main__":
                 scram_arch = "slc7_amd64_gcc700",
                 input_executable = "condor_executable_metis.sh", # your condor executable here
                 tarfile = tarfile, # your tarfile with assorted goodies here
-                special_dir = "VBSHWWNanoSkim/{}".format(tag), # output files into /hadoop/cms/store/<user>/<special_dir>
+                special_dir = "NanoSkim/{}".format(tag), # output files into /hadoop/cms/store/<user>/<special_dir>
                 recopy_inputs = True,
                 min_completion_fraction = 1 if "Run201" in sample.get_datasetname() else 0.8,
         )
@@ -62,20 +61,20 @@ if __name__ == "__main__":
         # Set task summary
         task_summary[task.get_sample().get_datasetname()] = task.get_task_summary()
 
-        # if task.complete():
-        #     samplename = os.path.basename(os.path.normpath(task.get_outputdir()))
-        #     mergetask = LocalNanoAODMergeTask(
-        #             input_filenames=task.get_outputs(),
-        #             output_filename="{}/merged.root".format(skim_merged_dir + "/" + samplename + "/merged"),
-        #             ignore_bad = False,
-        #             )
-        #     if not mergetask.complete():
-        #         mergetask.process()
+        if task.complete():
+            samplename = os.path.basename(os.path.normpath(task.get_outputdir()))
+            mergetask = LocalNanoAODMergeTask(
+                    input_filenames=task.get_outputs(),
+                    output_filename="{}/merged.root".format(skim_merged_dir + "/" + samplename + "/merged"),
+                    ignore_bad = False,
+                    )
+            if not mergetask.complete():
+                mergetask.process()
 
     # Parse the summary and make a summary.txt that will be used to pretty status of the jobs
     os.system("rm -f web_summary.json")
     os.system("rm -f summary.json")
-    webdir="~/public_html/VBSHWWNanoSkimmerDashboard"
+    webdir="~/public_html/NanoSkimmerDashboard"
     StatsParser(data=task_summary, webdir=webdir).do()
     os.system("chmod -R 755 {}".format(webdir))
     os.system("msummary -r -i {}/web_summary.json".format(webdir))

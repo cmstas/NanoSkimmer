@@ -160,25 +160,6 @@ if grep -q "badread" check_xrd_stderr.txt || [[ "${EXTRAARGS}" == *"fetch_nano"*
     #<------------------------------------------------------------------------------------------------------------------------------
 fi
 
-# Figuring out nevents and neff_weights
-if [[ "${INPUTFILE}" == *"/NANOAOD/"* ]]; then # Relies on "/NANOAOD/" being present for data files. Perhaps not the brightest idea, however it seems to work for now.
-    echo 'void count_events(TString filename) { TFile* f = TFile::Open(filename.Data()); TTree* Events = (TTree*) f->Get("Events"); std::cout << Events->GetEntries() << std::endl; std::cout << Events->GetEntries() << std::endl;  std::cout << Events->GetEntries() << std::endl; }' > count_events.C
-    echo "Running count_events on all events" | tee >(cat >&2)
-    root -l -b -q count_events.C\(\"${INPUTFILE}\"\) > >(tee nevents.txt) 2> >(tee nevents_stderr.txt >&2)
-else
-    echo 'void count_events(TString filename) { TFile* f = TFile::Open(filename.Data()); TTree* Events = (TTree*) f->Get("Events"); std::cout << Events->Draw("(Generator_weight>0)-(Generator_weight<0)", "", "goff") << std::endl; std::cout << Events->Draw("(Generator_weight>0)-(Generator_weight<0)", "((Generator_weight>0)-(Generator_weight<0))>0", "goff") << std::endl;  std::cout << Events->Draw("(Generator_weight>0)-(Generator_weight<0)", "((Generator_weight>0)-(Generator_weight<0))<0", "goff") << std::endl; }' > count_events.C
-    echo "Running count_events on all events" | tee >(cat >&2)
-    root -l -b -q count_events.C\(\"${INPUTFILE}\"\) > >(tee nevents.txt) 2> >(tee nevents_stderr.txt >&2)
-fi
-
-RUN_STATUS=$?
-
-if [[ $RUN_STATUS != 0 ]]; then
-    echo "Error: count_nevents.C on all events crashed with exit code $?" | tee >(cat >&2)
-    echo "Exiting..."
-    exit 1
-fi
-
 # Run the postprocessor
 CMD="python scripts/nano_postproc.py \
     ./ ${INPUTFILE} \
@@ -204,25 +185,6 @@ echo "Renaming the output file"
 echo "mv ${NANOPOSTPROCOUTPUTFILENAME}_Skim.root output.root"
 mv ${NANOPOSTPROCOUTPUTFILENAME}_Skim.root output.root
 
-# Figuring out nevents and neff_weights
-if [[ "${INPUTFILE}" == *"/NANOAOD/"* ]]; then # Relies on "/NANOAOD/" being present for data files. Perhaps not the brightest idea, however it seems to work for now.
-    echo 'void count_events(TString filename) { TFile* f = TFile::Open(filename.Data()); TTree* Events = (TTree*) f->Get("Events"); std::cout << Events->GetEntries() << std::endl; std::cout << Events->GetEntries() << std::endl;  std::cout << Events->GetEntries() << std::endl; }' > count_events.C
-    echo "Running count_events on skimmed events" | tee >(cat >&2)
-    root -l -b -q count_events.C\(\"output.root\"\) > >(tee nevents_skimmed.txt) 2> >(tee nevents_skimmed_stderr.txt >&2)
-else
-    echo 'void count_events(TString filename) { TFile* f = TFile::Open(filename.Data()); TTree* Events = (TTree*) f->Get("Events"); std::cout << Events->Draw("(Generator_weight>0)-(Generator_weight<0)", "", "goff") << std::endl; std::cout << Events->Draw("(Generator_weight>0)-(Generator_weight<0)", "((Generator_weight>0)-(Generator_weight<0))>0", "goff") << std::endl;  std::cout << Events->Draw("(Generator_weight>0)-(Generator_weight<0)", "((Generator_weight>0)-(Generator_weight<0))<0", "goff") << std::endl; }' > count_events.C
-    echo "Running count_events on skimmed events" | tee >(cat >&2)
-    root -l -b -q count_events.C\(\"output.root\"\) > >(tee nevents_skimmed.txt) 2> >(tee nevents_skimmed_stderr.txt >&2)
-fi
-
-RUN_STATUS=$?
-
-if [[ $RUN_STATUS != 0 ]]; then
-    echo "Error: count_nevents.C on skimmed events crashed with exit code $?" | tee >(cat >&2)
-    echo "Exiting..."
-    exit 1
-fi
-
 # if the file was downloaded clean it up
 if grep -q "badread" check_xrd_stderr.txt; then
     rm -rf ${INPUTFILE}
@@ -233,37 +195,6 @@ echo -e "\n--- end running ---\n" #                             <----- section d
 echo "after running: ls -lrth"
 ls -lrth
 
-echo -e "\n--- begin embedding nevents ---\n" #                    <----- section division
-cat <<EOT >> embed.C
-void embed(TString rootfile, TString logfile)
-{
-    TFile* file = new TFile(rootfile, "update");
-
-    std::vector<std::vector<int>> event_list;
-    event_list.clear();
-    ifstream ifile;
-    ifile.open(logfile.Data());
-    std::string line;
-
-    TH1D* h_nevents = new TH1D("h_nevents", "h_nevents", 3, 0, 3);
-
-    int nline = 0;
-    while (std::getline(ifile, line))
-    {
-        nline++;
-        if (nline == 1) continue;
-        if (nline == 2) continue;
-        TString rawline = line;
-        int nevt = rawline.Atoi();
-        h_nevents->SetBinContent(nline-2, nevt);
-    }
-    h_nevents->Write();
-}
-EOT
-root -l -b -q 'embed.C("'${OUTPUTNAME}.root'", "nevents.txt")'
-
-echo -e "\n--- end embedding nevents ---\n" #                    <----- section division
-
 echo -e "\n--- begin copying output ---\n" #                    <----- section division
 echo "Sending output file $OUTPUTNAME.root"
 # Get local filepath name
@@ -272,11 +203,6 @@ OUTPUTDIRPATHNEW=$(echo ${OUTPUTDIR} | sed 's/^.*\(\/store.*\).*$/\1/')
 # Copying the output file
 COPY_SRC="file://`pwd`/${OUTPUTNAME}.root"
 COPY_DEST="davs://redirector.t2.ucsd.edu:1094//${OUTPUTDIRPATHNEW}/${OUTPUTNAME}_${IFILE}.root"
-stageout $COPY_SRC $COPY_DEST
-
-# Copying n events
-COPY_SRC="file://`pwd`/nevents.txt"
-COPY_DEST="davs://redirector.t2.ucsd.edu:1094//${OUTPUTDIRPATHNEW}/${OUTPUTNAME}_${IFILE}_nevents.txt"
 stageout $COPY_SRC $COPY_DEST
 
 echo -e "\n--- end copying output ---\n" #                    <----- section division
