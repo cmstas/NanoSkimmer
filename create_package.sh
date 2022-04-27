@@ -30,7 +30,7 @@ git rev-parse HEAD > tmp_create_package/${CMSSWVERSION}/src/PhysicsTools/NanoAOD
 cd tmp_create_package/${CMSSWVERSION}/src/PhysicsTools/NanoAODTools/
 
 # Setup and compile
-cmsenv
+eval `scramv1 runtime -sh`
 scram b -j
 
 # Copy NanoCORE

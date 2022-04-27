@@ -22,18 +22,19 @@ except:
     usage()
 
 if __name__ == "__main__":
+    user = os.environ.get("USER")
 
     # submission tag
-    tarfile = "/nfs-7/userdata/phchang/NanoSkimmers/{}_package.tar.gz".format(tag)
+    tarfile = "/ceph/cms/store/user/{}/skimPackages/{}_package.tar.gz".format(user,tag)
 
-    skim_merged_dir = "/nfs-7/userdata/phchang/NanoSkim/{}/".format(tag)
+    skim_merged_dir = "/ceph/cms/store/user/{}/skimOutput/{}/".format(user,tag)
 
     task_summary = {}
 
     for sample in samples:
         task = CondorTask(
                 sample = sample,
-                files_per_output = 1,
+                files_per_output = 5,
                 output_name = "output.root",
                 tag = tag,
                 # condor_submit_params = {"sites": ",".join([ x for x in list(good_sites) if x != "T2_US_UCSD" ] ), "classads": [ ["metis_extraargs", "fetch_nano"] ]},
@@ -49,9 +50,9 @@ if __name__ == "__main__":
                 scram_arch = "slc7_amd64_gcc700",
                 input_executable = "condor_executable_metis.sh", # your condor executable here
                 tarfile = tarfile, # your tarfile with assorted goodies here
-                special_dir = "NanoSkim/{}".format(tag), # output files into /hadoop/cms/store/<user>/<special_dir>
+                special_dir = "skimOutput/{}".format(tag), # output files into /hadoop/cms/store/<user>/<special_dir>
                 recopy_inputs = True,
-                min_completion_fraction = 1 if "Run201" in sample.get_datasetname() else 0.8,
+                #min_completion_fraction = 1 if "Run201" in sample.get_datasetname() else 0.8,
         )
 
         # Straightforward logic

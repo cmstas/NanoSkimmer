@@ -147,9 +147,9 @@ if grep -q "badread" check_xrd_stderr.txt || [[ "${EXTRAARGS}" == *"fetch_nano"*
     echo "Begin xrdcp"
     # echo "Running... xrdcp root://xrootd.unl.edu/$input $dest"
     # xrdcp root://xrootd.unl.edu/$input $dest
-    echo "Running... xrdcp root://cmsxrootd.fnal.gov/$input $dest"
+    echo "Running... xrdcp root://cmsxrootd.fnal.gov/$input $dest/."
     # echo "Running... xrdcp root://cms-xrd-global.cern.ch/$input $dest"
-    xrdcp root://cmsxrootd.fnal.gov/$input $dest
+    xrdcp root://cmsxrootd.fnal.gov/$input $dest/.
     echo "Done xrdcp"
     echo -e "\n--- end downloading via xrdcp ---\n" #                           <----- section division
     # Get local filepath name
@@ -202,7 +202,7 @@ OUTPUTDIRPATHNEW=$(echo ${OUTPUTDIR} | sed 's/^.*\(\/store.*\).*$/\1/')
 
 # Copying the output file
 COPY_SRC="file://`pwd`/${OUTPUTNAME}.root"
-COPY_DEST="davs://redirector.t2.ucsd.edu:1094//${OUTPUTDIRPATHNEW}/${OUTPUTNAME}_${IFILE}.root"
+COPY_DEST="davs://redirector.t2.ucsd.edu:1095/${OUTPUTDIRPATHNEW}/${OUTPUTNAME}_${IFILE}.root"
 stageout $COPY_SRC $COPY_DEST
 
 echo -e "\n--- end copying output ---\n" #                    <----- section division

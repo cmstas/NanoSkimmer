@@ -16,7 +16,7 @@ if [ -z ${CONDORJOBID} ]; then
     usage
 fi
 
-CONDOR_JOB_DIR=/tmp/phchang/condor_job_ad_${CONDORJOBID}/
+CONDOR_JOB_DIR=/tmp/${USER}/condor_job_ad_${CONDORJOBID}/
 
 mkdir -p ${CONDOR_JOB_DIR}
 

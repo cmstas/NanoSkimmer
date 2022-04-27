@@ -41,44 +41,24 @@ class skimProducer(Module):
     def endFile(self, inputFile, outputFile, inputTree, wrappedOutputTree):
         pass
 
-    def isMuonTTHIDVeto(self, i):
-        return ROOT.ttH.muonID(i, ROOT.ttH.IDveto, ROOT.nt.year())
-
-    def isElectronTTHIDVeto(self, i):
-        return ROOT.ttH.electronID(i, ROOT.ttH.IDveto, ROOT.nt.year())
-
-    def passSkim_3l(self, event):
-        """>= 3 lepton(=e, mu only) skim"""
+    def passSkim_2mu1HighPt1HighMll(self, event):
+        """>=2 mu and >=1 mu with pT>=50 GeV skim and >=1 OS mu pair with M(ll)>100 GeV"""
         # print(event._entry)
         ROOT.nt.GetEntry(event._entry)
-        electrons = Collection(event, "Electron")
         muons = Collection(event, "Muon")
-
-        # list to hold the loose leptons with pt > 10 GeV
-        charges_veto = []
-        leptons_veto = []
+        nMu = len(muons)
 
         # Looping over muons
-        nmuons_veto = 0
-        for i, lep in enumerate(muons):
+        nHighPtMuons = 0
+        nHighMllOSPair = 0
+        for i,mu1 in enumerate(muons):
+            if mu1.pt > 50 and abs(mu1.eta) < 2.4: nHighPtMuons += 1
+            for j in range(i+1,nMu):
+                mu2 = muons[j]
+                if mu1.pdgId == -mu2.pdgId:
+                    if (mu1.p4() + mu2.p4()).M() > 100: nHighMllOSPair += 1
 
-            # Check that it passes veto Id
-            if self.isMuonTTHIDVeto(i):
-                nmuons_veto += 1
-                charges_veto.append(lep.charge)
-                leptons_veto.append(ROOT.nt.Muon_p4()[i])
-
-        # Loop over the electrons
-        nelectrons_veto = 0
-        for i, lep in enumerate(electrons):
-
-            # check that if passes loose
-            if self.isElectronTTHIDVeto(i):
-                nelectrons_veto += 1
-                charges_veto.append(lep.charge)
-                leptons_veto.append(ROOT.nt.Electron_p4()[i])
-
-        if nelectrons_veto + nmuons_veto >= 3:
+        if nMu>=2 and nHighPtMuons>0 and nHighMllOSPair>0:
             return True
         else:
             return False
@@ -86,7 +66,7 @@ class skimProducer(Module):
     def analyze(self, event):
         """process event, return True (go to next module) or False (fail, go to next event)"""
 
-        if self.passSkim_3l(event):
+        if self.passSkim_2mu1HighPt1HighMll(event):
             return True
         else:
             return False
