@@ -34,7 +34,7 @@ if __name__ == "__main__":
     for sample in samples:
         task = CondorTask(
                 sample = sample,
-                files_per_output = 5,
+                files_per_output = 1, # FIXME: DO NOT SET TO ANYTHING OTHER THAN 1, OTHERWISE FILES ARE SKIPPED
                 output_name = "output.root",
                 tag = tag,
                 # condor_submit_params = {"sites": ",".join([ x for x in list(good_sites) if x != "T2_US_UCSD" ] ), "classads": [ ["metis_extraargs", "fetch_nano"] ]},

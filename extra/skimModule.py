@@ -63,10 +63,33 @@ class skimProducer(Module):
         else:
             return False
 
+    def passSkim_2mu1HighPt1MllonZ(self, event):
+        """>=2 mu and >=1 mu with pT>=50 GeV skim and >=1 OS mu pair with M(ll)>60 GeV"""
+        # print(event._entry)
+        ROOT.nt.GetEntry(event._entry)
+        muons = Collection(event, "Muon")
+        nMu = len(muons)
+
+        # Looping over muons
+        nHighPtMuons = 0
+        nMllOSPairOnZ = 0
+        for i,mu1 in enumerate(muons):
+            if mu1.pt > 50 and abs(mu1.eta) < 2.4: nHighPtMuons += 1
+            for j in range(i+1,nMu):
+                mu2 = muons[j]
+                if mu1.pdgId == -mu2.pdgId:
+                    if (mu1.p4() + mu2.p4()).M() > 60: nMllOSPairOnZ += 1
+
+        if nMu>=2 and nHighPtMuons>0 and nMllOSPairOnZ>0:
+            return True
+        else:
+            return False
+
     def analyze(self, event):
         """process event, return True (go to next module) or False (fail, go to next event)"""
 
         if self.passSkim_2mu1HighPt1HighMll(event):
+        #if self.passSkim_2mu1HighPt1MllonZ(event):
             return True
         else:
             return False
