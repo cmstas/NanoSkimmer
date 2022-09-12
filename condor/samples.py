@@ -113,4 +113,4 @@ data_2018 = {
         DBSSample(dataset="/DoubleMuon/Run2018D-UL2018_MiniAODv2_NanoAODv9-v2/NANOAOD")            : "data_Run2018D_mm",
 }
 
-samples = samples_signal_2018 + samples_signal_2017 + samples_signal_2016 + samples_ZZ_2018 + samples_ZZ_2017 + samples_ZZ_2016
+samples = samples_ZZ_2017

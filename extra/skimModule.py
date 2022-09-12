@@ -63,44 +63,46 @@ class skimProducer(Module):
     #    else:
     #        return False
 
-    #def passSkim_2mu1HighPt1MllonZ(self, event):
-    #    """>=2 mu and >=1 mu with pT>=50 GeV skim and >=1 OS mu pair with M(ll)>60 GeV"""
+#    def passSkim_2mu1HighPt1MllonZ(self, event):
+#        """>=2 mu and >=1 mu with pT>=50 GeV skim and >=1 OS mu pair with M(ll)>60 GeV"""
         # print(event._entry)
-    #    ROOT.nt.GetEntry(event._entry)
-    #    muons = Collection(event, "Muon")
-    #    nMu = len(muons)
+#        ROOT.nt.GetEntry(event._entry)
+#        muons = Collection(event, "Muon")
+#        nMu = len(muons)
 
         # Looping over muons
-    #    nHighPtMuons = 0
-    #    nMllOSPairOnZ = 0
-    #    for i,mu1 in enumerate(muons):
-    #        if mu1.pt > 50 and abs(mu1.eta) < 2.4: nHighPtMuons += 1
-    #        for j in range(i+1,nMu):
-    #            mu2 = muons[j]
-    #            if mu1.pdgId == -mu2.pdgId:
-    #                if (mu1.p4() + mu2.p4()).M() > 60: nMllOSPairOnZ += 1
+#        nHighPtMuons = 0
+#        nMllOSPairOnZ = 0
+#        for i,mu1 in enumerate(muons):
+	#for mu1 in enumerate(muons):
+#            if mu1.pt > 50 and abs(mu1.eta) < 2.4: nHighPtMuons += 1
+        #    for j in range(i+1,nMu):
+        #        mu2 = muons[j]
+        #        if mu1.pdgId == -mu2.pdgId:
+        #            if (mu1.p4() + mu2.p4()).M() > 60: nMllOSPairOnZ += 1
 
-     #   if nMu>=2 and nHighPtMuons>0 and nMllOSPairOnZ>0:
-     #       return True
-     #   else:
-     #       return False
+        #if nMu>=2 and nHighPtMuons>0 and nMllOSPairOnZ>0:
+#	if nMu>=2 and nHighPtMuons>0:
+#            return True
+#        else:
+#            return False
 
     def passSkim_4lep(self, event):
 	""" 4 lepton skim """
 	ROOT.nt.GetEntry(event._entry)
 	muons = Collection(event, "Muon")
-        nMu = len(muons)
-        electrons = Collection(event, "Electron")
-        nEle = len(electrons)
+	nMu = len(muons)
+	electrons = Collection(event, "Electron")
+	nEle = len(electrons)
 
 	#Loop over muons
 	nCandMu = 0
-        for mu in enumerate(muons):
-		if mu.pt > 10 and abs(mu.eta) < 2.4 and mu.looseId = 1 and mu.pfIsoId >= 1: nCandMu += 1      
+	for i,mu in enumerate(muons):
+		if mu.pt > 10 and abs(mu.eta) < 2.4 and mu.looseId and mu.pfIsoId >= 1: nCandMu += 1      
 
-        nCandEle = 0
-	for el in enumerate(electrons):
-		if el.pt > 10 and abs(el.eta) < 2.5 and el.mvaFall17V2Iso_WPL = 1 and el.pfRelIso03_all > 0.4: nCandEle += 1
+	nCandEle = 0
+	for j,el in enumerate(electrons):
+		if el.pt > 10 and abs(el.eta) < 2.5 and el.mvaFall17V2Iso_WPL and el.pfRelIso03_all > 0.4: nCandEle += 1
 
 	if nCandMu + nCandEle >= 4:
 		return True
@@ -113,9 +115,9 @@ class skimProducer(Module):
         #if self.passSkim_2mu1HighPt1HighMll(event):
         #if self.passSkim_2mu1HighPt1MllonZ(event):
 	if self.passSkim_4lep(event):
-            return True
-        else:
-            return False
+		return True
+	else:
+		return False
 
 # define modules using the syntax 'name = lambda : constructor' to avoid having them loaded when not needed
 

@@ -25,7 +25,8 @@ if __name__ == "__main__":
     user = os.environ.get("USER")
 
     # submission tag
-    tarfile = "/ceph/cms/store/user/{}/skimPackages/{}_package.tar.gz".format(user,tag)
+    #tarfile = "/ceph/cms/store/user/{}/skimPackages/{}_package.tar.gz".format(user,tag)
+    tarfile = "/home/users/{}/Triboson/NanoSkimmer/package.tar.gz".format(user)
 
     skim_merged_dir = "/ceph/cms/store/user/{}/skimOutput/{}/".format(user,tag)
 
