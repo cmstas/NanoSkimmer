@@ -10,6 +10,7 @@ class skimProducer(Module):
         print("Loading NanoCORE shared libraries...")
         ROOT.gSystem.Load("NanoTools/NanoCORE/libNANO_CORE.so")
         header_files = ["ElectronSelections", "MuonSelections", "TauSelections", "Config"]
+	#header_files = ["Config"]
         for header_file in header_files:
             print("Loading NanoCORE {} header file...".format(header_file))
             ROOT.gROOT.ProcessLine(".L NanoTools/NanoCORE/{}.h".format(header_file))
@@ -102,7 +103,7 @@ class skimProducer(Module):
 
 	nCandEle = 0
 	for j,el in enumerate(electrons):
-		if el.pt > 10 and abs(el.eta) < 2.5 and el.mvaFall17V2Iso_WPL and el.pfRelIso03_all > 0.4: nCandEle += 1
+		if el.pt > 10 and abs(el.eta) < 2.5 and el.mvaFall17V2noIso_WPL and el.pfRelIso03_all < 0.4: nCandEle += 1
 
 	if nCandMu + nCandEle >= 4:
 		return True
