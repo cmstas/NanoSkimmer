@@ -272,6 +272,29 @@ samples_ttbar_2016 = {
         DBSSample(dataset="/TTToSemiLeptonic_TuneCP5_13TeV-powheg-pythia8/RunIISummer20UL16NanoAODAPVv9-106X_mcRun2_asymptotic_preVFP_v11-v1/NANOAODSIM")		       : "TTToSemiLeptonic_preVFP",
 }
 
+samples_ttg_2018 = {
+
+	DBSSample(dataset="/TTGamma_SingleLept_TuneCP5_13TeV-madgraph-pythia8/RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v1/NANOAODSIM")  		       : "TTGamma_single_lep",
+	DBSSample(dataset="/TTGamma_Dilept_TuneCP5_13TeV-madgraph-pythia8/RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v1/NANOAODSIM")  		       : "TTGamma_dilepton",
+
+}
+
+samples_ttg_2017 = {
+
+	DBSSample(dataset="/TTGamma_SingleLept_TuneCP5_13TeV-madgraph-pythia8/RunIISummer20UL17NanoAODv9-106X_mc2017_realistic_v9-v1/NANOAODSIM")  			       : "TTGamma_single_lep",
+        DBSSample(dataset="/TTGamma_Dilept_TuneCP5_13TeV-madgraph-pythia8/RunIISummer20UL17NanoAODv9-106X_mc2017_realistic_v9-v1/NANOAODSIM") 				       : "TTGamma_dilepton",
+
+}
+
+samples_ttg_2016 = {
+
+	DBSSample(dataset="/TTGamma_SingleLept_TuneCP5_13TeV-madgraph-pythia8/RunIISummer20UL16NanoAODv9-106X_mcRun2_asymptotic_v17-v1/NANOAODSIM") 			       : "TTGamma_single_lep",
+        DBSSample(dataset="/TTGamma_Dilept_TuneCP5_13TeV-madgraph-pythia8/RunIISummer20UL16NanoAODv9-106X_mcRun2_asymptotic_v17-v1/NANOAODSIM")  			       : "TTGamma_dilepton",
+	DBSSample(dataset="/TTGamma_SingleLept_TuneCP5_13TeV-madgraph-pythia8/RunIISummer20UL16NanoAODAPVv9-106X_mcRun2_asymptotic_preVFP_v11-v1/NANOAODSIM") 		       : "TTGamma_single_lep_preVFP",
+        DBSSample(dataset="/TTGamma_Dilept_TuneCP5_13TeV-madgraph-pythia8/RunIISummer20UL16NanoAODAPVv9-106X_mcRun2_asymptotic_preVFP_v11-v1/NANOAODSIM")  		       : "TTGamma_dilepton_preVFP",
+
+}
+
 samples_WW_2018 = {
 
 	DBSSample(dataset="/WWTo2L2Nu_TuneCP5_13TeV-powheg-pythia8/RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v2/NANOAODSIM")			       : "WW",
@@ -288,6 +311,44 @@ samples_WW_2016 = {
 
 	DBSSample(dataset="/WWTo2L2Nu_TuneCP5_13TeV-powheg-pythia8/RunIISummer20UL16NanoAODv9-106X_mcRun2_asymptotic_v17-v1/NANOAODSIM")				       : "WW",
 	DBSSample(dataset="/WWTo2L2Nu_TuneCP5_13TeV-powheg-pythia8/RunIISummer20UL16NanoAODAPVv9-106X_mcRun2_asymptotic_preVFP_v11-v1/NANOAODSIM")			       : "WW_preVFP",
+}
+
+samples_WWG_2018 = {
+
+	DBSSample(dataset="/WWG_TuneCP5_13TeV-amcatnlo-pythia8/RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v2/NANOAODSIM")  				       : "WWGamma",
+
+}
+
+samples_WWG_2017 = {
+
+	DBSSample(dataset="/WWG_TuneCP5_13TeV-amcatnlo-pythia8/RunIISummer20UL17NanoAODv9-106X_mc2017_realistic_v9-v1/NANOAODSIM") 					       : "WWGamma",
+
+}
+
+samples_WWG_2016 = {
+
+	DBSSample(dataset="/WWG_TuneCP5_13TeV-amcatnlo-pythia8/RunIISummer20UL16NanoAODv9-106X_mcRun2_asymptotic_v17-v1/NANOAODSIM") 					       : "WWGamma",
+	DBSSample(dataset="/WWG_TuneCP5_13TeV-amcatnlo-pythia8/RunIISummer20UL16NanoAODAPVv9-106X_mcRun2_asymptotic_preVFP_v11-v1/NANOAODSIM")  			       : "WWGamma_preVFP",
+
+}
+
+samples_WZG_2018 = {
+
+	DBSSample(dataset="/WZG_TuneCP5_13TeV-amcatnlo-pythia8/RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v1/NANOAODSIM")				       : "WZGamma",
+
+}
+
+samples_WZG_2017 = {
+
+	DBSSample(dataset="/WZG_TuneCP5_13TeV-amcatnlo-pythia8/RunIISummer20UL17NanoAODv9-106X_mc2017_realistic_v9-v1/NANOAODSIM") 					       : "WZGamma",
+
+}
+
+samples_WZG_2016 = {
+
+	DBSSample(dataset="/WZG_TuneCP5_13TeV-amcatnlo-pythia8/RunIISummer20UL16NanoAODv9-106X_mcRun2_asymptotic_v17-v1/NANOAODSIM") 					       : "WZGamma",
+	DBSSample(dataset="/WZG_TuneCP5_13TeV-amcatnlo-pythia8/RunIISummer20UL16NanoAODAPVv9-106X_mcRun2_asymptotic_preVFP_v11-v1/NANOAODSIM") 				       : "WZGamma_preVFP",	
+
 }
 
 samples_SSWW_2018 = {
@@ -447,4 +508,4 @@ data_2018 = {
         DBSSample(dataset="/DoubleMuon/Run2018D-UL2018_MiniAODv2_NanoAODv9-v2/NANOAOD")            : "data_Run2018D_mm",
 }
 
-samples = data_2018
+samples = samples_ttW_2016
