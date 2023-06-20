@@ -46,8 +46,8 @@ if __name__ == "__main__":
                 # condor_submit_params = {"sites": "T2_US_UCSD", "use_xrootd":True, "classads": [ ["periodic_hold", "(JobStatus == 2) && (time() - EnteredCurrentStatus) > (3 * 3600)"] ]},
                 # condor_submit_params = {"sites": "T2_US_UCSD", "use_xrootd":True},
                 # condor_submit_params = {"use_xrootd":True},
-                cmssw_version = "CMSSW_10_2_13",
-                scram_arch = "slc7_amd64_gcc700",
+                cmssw_version = "CMSSW_12_6_0_patch1",
+                scram_arch = "slc7_amd64_gcc10",
                 input_executable = "condor_executable_metis.sh", # your condor executable here
                 tarfile = tarfile, # your tarfile with assorted goodies here
                 special_dir = "skimOutput/{}".format(tag), # output files into /hadoop/cms/store/<user>/<special_dir>

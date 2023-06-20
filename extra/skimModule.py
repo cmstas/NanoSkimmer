@@ -24,63 +24,36 @@ class skimProducer(Module):
         self._tchain = ROOT.TChain("Events")
         self._tchain.Add(inputFile.GetName())
         print(inputFile)
-        if "UL16" in inputFile.GetName():
-            ROOT.gconf.nanoAOD_ver = 8
-        if "UL17" in inputFile.GetName():
-            ROOT.gconf.nanoAOD_ver = 8
-        if "UL18" in inputFile.GetName():
-            ROOT.gconf.nanoAOD_ver = 8
         ROOT.nt.Init(self._tchain)
-        ROOT.gconf.GetConfigs(ROOT.nt.year())
-        print("year = {}".format(ROOT.nt.year()))
-        print("WP_DeepFlav_loose = {}".format(ROOT.gconf.WP_DeepFlav_loose))
-        print("WP_DeepFlav_medium = {}".format(ROOT.gconf.WP_DeepFlav_medium))
-        print("WP_DeepFlav_tight = {}".format(ROOT.gconf.WP_DeepFlav_tight))
+        #ROOT.gconf.GetConfigs(ROOT.nt.year())
         pass
 
     def endFile(self, inputFile, outputFile, inputTree, wrappedOutputTree):
         pass
 
-    def passSkim_2mu1HighPt1HighMll(self, event):
-        """>=2 mu and >=1 mu with pT>=50 GeV skim and >=1 OS mu pair with M(ll)>100 GeV"""
+    def passSkim_HLT_TripleMu_5_3_3_Mass3p8_DZ(self, event):
+        """>=2 mu and >=1 mu with pT>=7 GeV and >=2 mu with pT>=5 GeV and >=1 OS mu pair"""
         # print(event._entry)
         ROOT.nt.GetEntry(event._entry)
         muons = Collection(event, "Muon")
         nMu = len(muons)
-
-        # Looping over muons
-        nHighPtMuons = 0
-        nHighMllOSPair = 0
-        for i,mu1 in enumerate(muons):
-            if mu1.pt > 50 and abs(mu1.eta) < 2.4: nHighPtMuons += 1
-            for j in range(i+1,nMu):
-                mu2 = muons[j]
-                if mu1.pdgId == -mu2.pdgId:
-                    if (mu1.p4() + mu2.p4()).M() > 100: nHighMllOSPair += 1
-
-        if nMu>=2 and nHighPtMuons>0 and nHighMllOSPair>0:
-            return True
-        else:
+        if nMu<2:
             return False
 
-    def passSkim_2mu1HighPt1MllonZ(self, event):
-        """>=2 mu and >=1 mu with pT>=50 GeV skim and >=1 OS mu pair with M(ll)>60 GeV"""
-        # print(event._entry)
-        ROOT.nt.GetEntry(event._entry)
-        muons = Collection(event, "Muon")
-        nMu = len(muons)
-
         # Looping over muons
-        nHighPtMuons = 0
-        nMllOSPairOnZ = 0
+        nMu7 = 0
+        nMu5 = 0
+        nMuOSPair = 0
         for i,mu1 in enumerate(muons):
-            if mu1.pt > 50 and abs(mu1.eta) < 2.4: nHighPtMuons += 1
-            for j in range(i+1,nMu):
-                mu2 = muons[j]
-                if mu1.pdgId == -mu2.pdgId:
-                    if (mu1.p4() + mu2.p4()).M() > 60: nMllOSPairOnZ += 1
+            if abs(mu1.eta) < 2.4:
+                if mu1.pt > 5: nMu5 += 1
+                if mu1.pt > 7: nMu7 += 1
+                for j in range(i+1,nMu):
+                    mu2 = muons[j]
+                    if abs(mu2.eta) < 2.4:
+                        if mu1.pdgId == -mu2.pdgId: nMuOSPair += 1
 
-        if nMu>=2 and nHighPtMuons>0 and nMllOSPairOnZ>0:
+        if nMu7>=1 and nMu5>=2 and nMuOSPair>=1:
             return True
         else:
             return False
@@ -88,11 +61,7 @@ class skimProducer(Module):
     def analyze(self, event):
         """process event, return True (go to next module) or False (fail, go to next event)"""
 
-        if self.passSkim_2mu1HighPt1HighMll(event):
-        #if self.passSkim_2mu1HighPt1MllonZ(event):
-            return True
-        else:
-            return False
+        return self.passSkim_HLT_TripleMu_5_3_3_Mass3p8_DZ(event)
 
 # define modules using the syntax 'name = lambda : constructor' to avoid having them loaded when not needed
 

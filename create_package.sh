@@ -2,8 +2,8 @@
 
 source /cvmfs/cms.cern.ch/cmsset_default.sh
 
-SCRAMARCH=slc7_amd64_gcc700
-CMSSWVERSION=CMSSW_10_2_13
+SCRAMARCH=slc7_amd64_gcc10
+CMSSWVERSION=CMSSW_12_6_0_patch1
 
 # Go to a working directory that will be cleaned afterwards
 rm -rf tmp_create_package
@@ -17,7 +17,7 @@ cd ${CMSSWVERSION}/src/ # tmp_create_package/CMSSW_10_2_13/src/
 # git clone the nanoAOD-tools
 git clone https://github.com/cms-nanoAOD/nanoAOD-tools.git PhysicsTools/NanoAODTools
 cd PhysicsTools/NanoAODTools # tmp_create_package/CMSSW_10_2_13/src/PhysicsTools/NanoAODTools
-git checkout e963c70
+#git checkout e963c70
 
 # Copy the extra files
 cp ../../../../../extra/* python/postprocessing/examples

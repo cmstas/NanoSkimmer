@@ -25,8 +25,8 @@ echo ""
 
 source /cvmfs/cms.cern.ch/cmsset_default.sh
 
-SCRAMARCH=slc7_amd64_gcc700
-CMSSWVERSION=CMSSW_10_2_13
+SCRAMARCH=slc7_amd64_gcc10
+CMSSWVERSION=CMSSW_12_6_0_patch1
 
 # Go to a working directory that will be cleaned afterwards
 mkdir -p tmp_test_package
@@ -41,7 +41,7 @@ cd PhysicsTools/NanoAODTools/
 eval `scramv1 runtime -sh`
 scram b -j
 
-python scripts/nano_postproc.py \
+python3 scripts/nano_postproc.py \
     ./ \
     ${NANOAODPATH} \
     -b python/postprocessing/examples/keep_and_drop.txt \
